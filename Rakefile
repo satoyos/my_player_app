@@ -6,6 +6,20 @@ require 'motion/project/template/ios'
 require 'bundler'
 Bundler.require
 
+def rake_mode
+  case ARGV.join(' ')
+  when /simulator|device|pod|\A\z/ ; :simulator
+  when /spec/ ; :spec
+  end
+end
+
+case rake_mode
+when :spec
+  Bundler.require :spec
+when :simulator
+  Bundler.require :simulator
+end
+
 # require 'bubble-wrap'
 
 Motion::Project::App.setup do |app|
@@ -28,6 +42,7 @@ Motion::Project::App.setup do |app|
   # Target OS - Set this to the lowest version you want to support in the App Store
   # app.deployment_target = '7.1'
   # app.deployment_target = '8.0'
+  app.deployment_target = '11.4'
 
   app.icons = Dir.glob("resources/icon*.png").map{|icon| icon.split("/").last}
 
@@ -39,7 +54,7 @@ Motion::Project::App.setup do |app|
   # app.fonts = ['Oswald-Regular.ttf', 'FontAwesome.otf'] # These go in /resources
   # Or use all *.ttf fonts in the /resources/fonts directory:
   # app.fonts = Dir.glob("resources/fonts/*.ttf").map{|font| "fonts/#{font.split('/').last}"}
-  # app.frameworks += %w(QuartzCore CoreGraphics MediaPlayer MessageUI CoreData)
+  app.frameworks += %w(AVFoundation)
 
   # app.vendor_project('vendor/Flurry', :static)
   # app.vendor_project('vendor/DSLCalendarView', :static, :cflags => '-fobjc-arc') # Using arc
@@ -66,6 +81,8 @@ Motion::Project::App.setup do |app|
     app.entitlements['application-identifier'] = app.seed_id + '.' + app.identifier
     app.entitlements['keychain-access-groups'] = [ app.seed_id + '.' + app.identifier ]
   end
+
+  app.redgreen_style = :full if rake_mode == :spec
 
   puts "Name: #{app.name}"
   puts "Using profile: #{app.provisioning_profile}"

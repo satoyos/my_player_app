@@ -1,22 +1,39 @@
 class HomeScreen < PM::Screen
   title "Your title here"
   stylesheet HomeScreenStylesheet
+  attr_reader :player
 
   def on_load
     set_nav_bar_button :left, system_item: :camera, action: :nav_left_button
     set_nav_bar_button :right, title: "Right", action: :nav_right_button
 
     @hello_world = append!(UILabel, :hello_world)
+    set_player
+
   end
 
   def nav_left_button
     mp 'Left button'
+    player.prepareToPlay
+    player.play
   end
 
   def nav_right_button
     mp 'Right button'
   end
 
+  def set_player
+    path = NSBundle.mainBundle.pathForResource('button10', ofType: 'm4a')
+    url = NSURL.fileURLWithPath(path)
+    @player = AVAudioPlayer.alloc.initWithContentsOfURL(url, error: nil)
+    @player.delegate = self
+  end
+
+  def audioPlayerDidFinishPlaying(audio_player, successfully:flag)
+    return unless flag
+
+    puts "- playing finished successfully! (currentTime => #{player.currentTime})"
+  end
   # You don't have to reapply styles to all UIViews, if you want to optimize, another way to do it
   # is tag the views you need to restyle in your stylesheet, then only reapply the tagged views, like so:
   #   def logo(st)

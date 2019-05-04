@@ -68,6 +68,7 @@ GEM
     molinillo (0.6.6)
     motion-cocoapods (1.9.2)
       cocoapods (>= 1.0.0)
+    motion-redgreen (1.0.0)
     motion-require (0.2.0)
     motion-yaml (1.4)
     motion_print (1.2.0)
@@ -109,6 +110,7 @@ DEPENDENCIES
   afmotion
   cdq
   motion-cocoapods
+  motion-redgreen
   motion-yaml (= 1.4)
   newclear
   rake

@@ -7,10 +7,16 @@ gem "cdq" # Core Data
 gem "motion-yaml", "1.4" # Version 1.5 breaks CDQ
 gem "afmotion" # Networking
 
+# for Test
+group :spec do # rake spec
+  gem 'motion-redgreen'
+end
+
 # Debugging tools
 gem "newclear" # Completely wipe out the simulator and rebuild
 
 # Optional
+
 
 # gem "redpotion-generators" # Additional command line generators
 # gem "ProMotion-XLForm" # Form screens
